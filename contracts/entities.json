@@ -1,0 +1,17 @@
+{
+  "schema_version": "1",
+  "domain": "空中基站救援通话可用性账",
+  "required_fields": [
+    "mission_ref",
+    "station_ref",
+    "team_ref",
+    "event_kind",
+    "device_time"
+  ],
+  "time_format": "ISO 8601 with offset",
+  "sample": {
+    "mission_ref": "MISSION-DEMO",
+    "station_ref": "STATION-A",
+    "event_kind": "connected"
+  }
+}
