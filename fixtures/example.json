@@ -1,5 +1,80 @@
 {
-  "mission_ref": "MISSION-DEMO",
-  "station_ref": "STATION-A",
-  "event_kind": "connected"
+  "_comment": "盐边空中组网的虚构交换样例，不含真实个人资料。时间均为带偏移 ISO 8601。",
+  "admin_mission": {
+    "mission_ref": "YB-DEMO",
+    "name": "示例：地面网络中断后翼龙升空组网",
+    "started_at": "2026-09-20T08:00:00+08:00",
+    "ended_at": "2026-09-20T14:00:00+08:00"
+  },
+  "admin_station_mission": {
+    "mission_ref": "YB-DEMO",
+    "station_ref": "WING-DEMO",
+    "node_kind": "uav_relay",
+    "altitude_m": 3200,
+    "started_at": "2026-09-20T08:00:00+08:00",
+    "ended_at": "2026-09-20T14:00:00+08:00"
+  },
+  "admin_footprint": {
+    "mission_ref": "YB-DEMO",
+    "station_ref": "WING-DEMO",
+    "valid_from": "2026-09-20T08:00:00+08:00",
+    "valid_to": "2026-09-20T14:00:00+08:00",
+    "center_lat": 26.9,
+    "center_lon": 101.51,
+    "radius_m": 8000
+  },
+  "ingest_envelope": {
+    "received_at": "2026-09-20T12:05:00+08:00",
+    "events": [
+      {
+        "source_ref": "wing-demo-log",
+        "source_event_id": "evt-1",
+        "mission_ref": "YB-DEMO",
+        "station_ref": "WING-DEMO",
+        "team_ref": "TEAM-DEMO-1",
+        "event_kind": "access_attempt",
+        "attempt_id": "ATT-DEMO-1",
+        "device_time": "2026-09-20T10:05:00+08:00"
+      },
+      {
+        "source_ref": "wing-demo-log",
+        "source_event_id": "evt-2",
+        "mission_ref": "YB-DEMO",
+        "station_ref": "WING-DEMO",
+        "team_ref": "TEAM-DEMO-1",
+        "event_kind": "access_accept",
+        "attempt_id": "ATT-DEMO-1",
+        "device_time": "2026-09-20T10:05:20+08:00"
+      },
+      {
+        "_note": "附着后无 call_connected：归类 attached_only，不能报成通话或获救",
+        "source_ref": "wing-demo-log",
+        "source_event_id": "evt-3",
+        "mission_ref": "YB-DEMO",
+        "station_ref": "WING-DEMO",
+        "team_ref": "TEAM-DEMO-2",
+        "event_kind": "access_attempt",
+        "attempt_id": "ATT-DEMO-2",
+        "device_time": "2026-09-20T09:00:00+08:00",
+        "clock_offset_s": -60
+      },
+      {
+        "_note": "设备时钟慢 8 分钟，显式偏移校正；原始时间仍逐字保留",
+        "source_ref": "handheld-demo",
+        "source_event_id": "evt-4",
+        "mission_ref": "YB-DEMO",
+        "station_ref": "WING-DEMO",
+        "team_ref": "TEAM-DEMO-3",
+        "event_kind": "call_connected",
+        "call_id": "CALL-DEMO-1",
+        "device_time": "2026-09-19T19:52:00+00:00",
+        "clock_offset_s": 480
+      }
+    ]
+  },
+  "availability_queries": {
+    "attempt_chains": "/missions/YB-DEMO/attempt-chains?start=2026-09-20T10:00:00+08:00&end=2026-09-20T12:00:00+08:00",
+    "blind_zones": "/missions/YB-DEMO/blind-zones?start=2026-09-20T10:00:00+08:00&end=2026-09-20T12:00:00+08:00",
+    "events_audit": "/missions/YB-DEMO/events?start=2026-09-20T10:00:00+08:00&end=2026-09-20T12:00:00+08:00&team=TEAM-DEMO-1"
+  }
 }

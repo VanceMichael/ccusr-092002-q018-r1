@@ -1,17 +1,56 @@
 {
-  "schema_version": "1",
+  "schema_version": "2",
   "domain": "空中基站救援通话可用性账",
-  "required_fields": [
-    "mission_ref",
-    "station_ref",
-    "team_ref",
-    "event_kind",
-    "device_time"
-  ],
-  "time_format": "ISO 8601 with offset",
+  "time_format": "ISO 8601 with offset；裸时间（无偏移）一律拒收",
+  "idempotency": "(source_ref, source_event_id) 唯一；同键重传识别为 duplicate，不重复计数",
+  "event_kinds": {
+    "access_attempt": "外部接入尝试；可能是重复重试或来路不明终端，绝不等于通话或获救",
+    "access_accept": "网络允许附着；附着成功仍不等于通话成功",
+    "access_reject": "网络拒绝附着",
+    "call_connected": "实际通话建立；有效联络与真正通话只认这一种",
+    "call_ended": "通话正常结束",
+    "call_dropped": "通话中断（掉话）"
+  },
+  "attempt_chain_outcomes": {
+    "success": "链上出现 access_accept 且出现 call_connected",
+    "attached_only": "出现 access_accept，但全链无 call_connected（禁止报成通话/获救）",
+    "rejected": "链上出现 access_reject",
+    "unknown": "只有 access_attempt、没有任何终态（外部接入尝试多落于此）"
+  },
+  "time_correction_basis": {
+    "as_reported": "按设备时间原样采信，未校正",
+    "explicit_offset": "按上报方显式 clock_offset_s 校正",
+    "synced_time": "上报方给出参考时钟 synced_time，以其为事件时刻",
+    "late_log": "无对时依据的迟到补传；保留原始时间并标记，不静默改写"
+  },
+  "event_fields": {
+    "required": ["source_ref", "source_event_id", "mission_ref", "event_kind", "device_time"],
+    "optional": [
+      "station_ref",
+      "team_ref",
+      "attempt_id",
+      "call_id",
+      "latitude",
+      "longitude",
+      "clock_offset_s",
+      "synced_time",
+      "received_at",
+      "payload"
+    ],
+    "device_time": "设备时钟时间，逐字保留，不允许后台覆盖",
+    "event_time": "校正到参考时钟后的时刻（系统派生，UTC Z）",
+    "clock_offset_s": "event_time - device_time（秒）；未校正为 null",
+    "correction_basis": "校正依据，取值见 time_correction_basis",
+    "is_late_log": "收到时刻明显晚于事件时刻的迟到日志标记"
+  },
+  "blind_zone_rule": "队伍位置已知，且查询窗口末端不在任何处于任务时段内的有效覆盖圆内；仅有接入尝试/附着不改变判定。位置未知的队伍单列 teams_location_unknown，不武断报为盲区。",
   "sample": {
-    "mission_ref": "MISSION-DEMO",
-    "station_ref": "STATION-A",
-    "event_kind": "connected"
+    "mission_ref": "YB-2026-0920",
+    "station_ref": "WING-1",
+    "team_ref": "TEAM-C",
+    "event_kind": "access_attempt",
+    "attempt_id": "ATT-C",
+    "device_time": "2026-09-20T10:29:30+08:00",
+    "synced_time": "2026-09-20T10:30:00+08:00"
   }
 }

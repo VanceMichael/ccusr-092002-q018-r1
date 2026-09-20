@@ -15,13 +15,3 @@ data/
 target/
 .pytest_cache/
 *.sqlite3
-
-data/
-target/
-.pytest_cache/
-*.sqlite3
-
-data/
-target/
-.pytest_cache/
-*.sqlite3
