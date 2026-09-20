@@ -1,5 +1,44 @@
 {
-  "mission_ref": "MISSION-DEMO",
-  "station_ref": "STATION-A",
-  "event_kind": "connected"
+  "events": [
+    {
+      "source_event_id": "E-DEMO-0001",
+      "mission_ref": "MISSION-DEMO",
+      "station_ref": "STATION-A",
+      "team_ref": "TEAM-7",
+      "device_id": "DEV-7-01",
+      "session_ref": "CALL-7788",
+      "event_kind": "access_attempt",
+      "event_time_device": "2026-09-20T08:05:00+08:00"
+    },
+    {
+      "source_event_id": "E-DEMO-0002",
+      "mission_ref": "MISSION-DEMO",
+      "station_ref": "STATION-A",
+      "team_ref": "TEAM-7",
+      "device_id": "DEV-7-01",
+      "session_ref": "CALL-7788",
+      "event_kind": "access_attempt",
+      "event_time_device": "2026-09-20T08:05:09+08:00"
+    },
+    {
+      "source_event_id": "E-DEMO-0003",
+      "mission_ref": "MISSION-DEMO",
+      "station_ref": "STATION-A",
+      "team_ref": "TEAM-7",
+      "device_id": "DEV-7-01",
+      "session_ref": "CALL-7788",
+      "event_kind": "call_connected",
+      "event_time_device": "2026-09-20T08:05:12+08:00"
+    },
+    {
+      "source_event_id": "E-DEMO-0004",
+      "mission_ref": "MISSION-DEMO",
+      "station_ref": "STATION-A",
+      "team_ref": "TEAM-9",
+      "device_id": "DEV-9-02",
+      "session_ref": "CALL-7790",
+      "event_kind": "access_attempt",
+      "event_time_device": "2026-09-20T08:31:00+08:00"
+    }
+  ]
 }

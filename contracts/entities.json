@@ -1,17 +1,50 @@
 {
-  "schema_version": "1",
+  "schema_version": "2",
   "domain": "空中基站救援通话可用性账",
-  "required_fields": [
-    "mission_ref",
-    "station_ref",
-    "team_ref",
-    "event_kind",
-    "device_time"
+  "time_format": "ISO 8601 字符串，必须带时区偏移（如 2026-09-20T08:05:00+08:00）；存储与查询统一归一化为 UTC",
+  "raw_time_rule": "event_time_device / observed_at_device 为设备原始时间串，任何时钟校正都不得改写；校正结果单独存放并记录依据编号与实际偏移",
+  "counting_rule": "access_attempt 仅表示外部接入尝试，不代表成功通话或获救；successful_calls 以 call_connected 为准；同一通话链路中首次之后的尝试计为 retry；窗口结束仍无接通/拒绝终局的链路计为 unknown",
+  "required_fields": {
+    "event": [
+      "source_event_id",
+      "mission_ref",
+      "team_ref",
+      "event_kind",
+      "event_time_device"
+    ],
+    "mission": ["mission_ref", "starts_at"],
+    "station": ["station_ref", "mission_ref"],
+    "station_window": ["station_ref", "starts_at"],
+    "coverage_zone": ["station_ref", "center_lat", "center_lon", "radius_m"],
+    "team": ["team_ref"],
+    "team_location": ["team_ref", "lat", "lon", "observed_at_device"],
+    "clock_correction": ["device_id", "offset_ms", "basis"]
+  },
+  "event_kinds": [
+    "access_attempt",
+    "access_rejected",
+    "call_connected",
+    "call_dropped",
+    "call_ended"
   ],
-  "time_format": "ISO 8601 with offset",
-  "sample": {
+  "clock_correction": {
+    "formula": "event_time_corrected = event_time_device + offset_ms",
+    "basis_examples": ["gnss_sync", "network_sync", "manual_estimate", "drift_model"],
+    "late_basis": "依据可晚于事件登记；新依据使同设备历史事件的校正时间重算，旧依据标记 superseded 但不删除"
+  },
+  "coverage": {
+    "geometry": "coverage_zones：圆心 center_lat/center_lon + 半径 radius_m（米），可带 valid_from/valid_to",
+    "precondition": "覆盖判定仅在 station_windows 的实际升空服务时段内有效",
+    "blind_status": ["covered_but_no_call", "not_covered", "unknown_position"]
+  },
+  "sample_event": {
+    "source_event_id": "E-20260920-0001",
     "mission_ref": "MISSION-DEMO",
     "station_ref": "STATION-A",
-    "event_kind": "connected"
+    "team_ref": "TEAM-7",
+    "device_id": "DEV-7-01",
+    "session_ref": "CALL-7788",
+    "event_kind": "access_attempt",
+    "event_time_device": "2026-09-20T08:05:00+08:00"
   }
 }
